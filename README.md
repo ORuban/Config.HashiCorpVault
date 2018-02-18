@@ -3,8 +3,8 @@
 
 AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/4kc9k9io4paec56x/branch/master?svg=true)](https://ci.appveyor.com/project/OleksiiRuban/config-hashicorpvault/branch/master)
 
-Latest Nuget Package: [Config.HashiCorpVault 0.0.2](https://www.nuget.org/packages/Config.HashiCorpVault)
-> dotnet add package Config.HashiCorpVault --version 0.0.2
+Latest Nuget Package: [Config.HashiCorpVault 0.0.3](https://www.nuget.org/packages/Config.HashiCorpVault)
+> dotnet add package Config.HashiCorpVault --version 0.0.3
 
 
 ## License
