@@ -8,9 +8,53 @@ namespace ORuban.Extensions.Configuration.HashiCorpVault
     {
         public static IConfigurationBuilder AddHashiCorpVault(
             this IConfigurationBuilder configurationBuilder,
-            string vaultUri,
+            string vaultAddressWithPort,
             string token,
-            string Prefix,
+            string prefix,
+            IEnumerable<string> secrets)
+        {
+            if (string.IsNullOrWhiteSpace(vaultAddressWithPort))
+            {
+                throw new ArgumentException("Vault Address is required", nameof(vaultAddressWithPort));
+            }
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new ArgumentException("Auth token is required", nameof(token));
+            }
+
+            var client = new HashiCorpVaultClientWrapper(vaultAddressWithPort, token);
+
+            return AddHashiCorpVault(configurationBuilder, client, prefix, secrets);
+        }
+
+        public static IConfigurationBuilder AddHashiCorpVault(
+            this IConfigurationBuilder configurationBuilder,
+            string vaultAddressWithPort,
+            string roleId, 
+            string secretId,
+            string prefix,
+            IEnumerable<string> secrets)
+        {
+            if (string.IsNullOrWhiteSpace(vaultAddressWithPort))
+            {
+                throw new ArgumentException("Vault Address is required", nameof(vaultAddressWithPort));
+            }
+
+            if (string.IsNullOrEmpty(roleId))
+            {
+                throw new ArgumentException("Role Id is required", nameof(roleId));
+            }
+
+            var client = new HashiCorpVaultClientWrapper(vaultAddressWithPort, roleId, secretId);
+
+            return AddHashiCorpVault(configurationBuilder, client, prefix, secrets);
+        }
+
+        public static IConfigurationBuilder AddHashiCorpVault(
+            this IConfigurationBuilder configurationBuilder,
+            IHashiCorpVaultClient client,
+            string prefix,
             IEnumerable<string> secrets)
         {
             if (configurationBuilder == null)
@@ -18,14 +62,9 @@ namespace ORuban.Extensions.Configuration.HashiCorpVault
                 throw new ArgumentNullException(nameof(configurationBuilder));
             }
 
-            if (string.IsNullOrWhiteSpace(vaultUri))
+            if (client == null)
             {
-                throw new ArgumentException("Vault URI is required", nameof(vaultUri));
-            }
-
-            if (string.IsNullOrEmpty(token))
-            {
-                throw new ArgumentException("Auth token is required", nameof(token));
+                throw new ArgumentNullException(nameof(client));
             }
 
             if (secrets == null)
@@ -35,8 +74,8 @@ namespace ORuban.Extensions.Configuration.HashiCorpVault
 
             configurationBuilder.Add(new HashiCorpVaultConfigurationSource()
             {
-                Client = new HashiCorpVaultClientWrapper(vaultUri, token),
-                Prefix = Prefix,
+                Client = client,
+                Prefix = prefix,
                 Secrets = secrets
             });
 
