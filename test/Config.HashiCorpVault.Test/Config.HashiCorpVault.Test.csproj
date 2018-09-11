@@ -4,12 +4,15 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Config.HashiCorpVault\Config.HashiCorpVault.csproj"/>
+    <ProjectReference Include="..\..\src\Config.HashiCorpVault\Config.HashiCorpVault.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02"/>
-    <PackageReference Include="xunit" Version="2.2.0"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0"/>
-    <PackageReference Include="Moq" Version="4.8.1"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Moq" Version="4.10.0" />
   </ItemGroup>
 </Project>
