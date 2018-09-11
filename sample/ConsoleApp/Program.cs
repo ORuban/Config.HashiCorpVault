@@ -50,11 +50,20 @@ namespace ConsoleApp
 
             var client = new HashiCorpVaultClientWrapper(vaultAddressWithPort, token);
 
-            var configBuilder =
+            DisplayCurrentConfig(
                 new ConfigurationBuilder()
                     .AddHashiCorpVault(client, "secret", new[] {"keyA", "keyB", "group1/keyC"})
-                    .AddHashiCorpVault(client, "secret/group2", new[] {"keyD"});
+                    .AddHashiCorpVault(client, "secret/group2", new[] {"keyD"})
+            );
 
+            DisplayCurrentConfig(
+                new ConfigurationBuilder()
+                    .AddHashiCorpVault(client, "secret/group2/keyD")
+            );
+        }
+
+        private static void DisplayCurrentConfig(IConfigurationBuilder configBuilder)
+        {
             Console.WriteLine("Building configuration...");
 
             IConfiguration config = configBuilder.Build();

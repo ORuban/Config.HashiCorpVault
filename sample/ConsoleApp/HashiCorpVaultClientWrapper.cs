@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ORuban.Extensions.Configuration.HashiCorpVault;
@@ -22,6 +23,12 @@ namespace ConsoleApp
         {
             var rawData = await _vaultClientImplementation.V1.Secrets.KeyValue.V2.ReadSecretAsync(path);
             return rawData.Data.Data.First().Value.ToString();
+        }
+
+        public async Task<IDictionary<string, object>> GetSecretsAsync(string path)
+        {
+            var rawData = await _vaultClientImplementation.V1.Secrets.KeyValue.V2.ReadSecretAsync(path);
+            return rawData.Data.Data;
         }
     }
 }
