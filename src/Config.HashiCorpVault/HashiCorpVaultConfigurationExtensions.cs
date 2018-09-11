@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace ORuban.Extensions.Configuration.HashiCorpVault
@@ -27,7 +28,7 @@ namespace ORuban.Extensions.Configuration.HashiCorpVault
                 throw new ArgumentNullException(nameof(secrets));
             }
 
-            configurationBuilder.Add(new HashiCorpVaultConfigurationSource()
+            configurationBuilder.Add(new HashiCorpVaultConfigurationSource
             {
                 Client = client,
                 Prefix = prefix,
@@ -35,6 +36,14 @@ namespace ORuban.Extensions.Configuration.HashiCorpVault
             });
 
             return configurationBuilder;
+        }
+
+        public static IConfigurationBuilder AddHashiCorpVault(
+            this IConfigurationBuilder configurationBuilder,
+            IHashiCorpVaultClient client,
+            string prefix)
+        {
+            return AddHashiCorpVault(configurationBuilder, client, prefix, Enumerable.Empty<string>());
         }
     }
 }

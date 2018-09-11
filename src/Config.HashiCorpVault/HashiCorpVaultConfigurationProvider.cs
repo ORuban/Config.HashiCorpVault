@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
@@ -24,18 +25,29 @@ namespace ORuban.Extensions.Configuration.HashiCorpVault
         {
             var data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-
-            foreach (var secretItem in _secrets)
+            if (_secrets.Any())
             {
-                if (string.IsNullOrWhiteSpace(secretItem))
+                foreach (var secretItem in _secrets)
                 {
-                    continue;
+                    if (string.IsNullOrWhiteSpace(secretItem))
+                    {
+                        continue;
+                    }
+
+                    var key = secretItem.Replace('/', ':');
+                    var value = await _client.GetSecretAsync($"{_basePath}{secretItem}").ConfigureAwait(false);
+
+                    data.Add(key, value);
                 }
+            }
+            else
+            {
+                var secrets = await _client.GetSecretsAsync(_basePath);
 
-                var key = secretItem.Replace('/', ':');
-                var value = await _client.GetSecretAsync($"{_basePath}{secretItem}").ConfigureAwait(false);
-
-                data.Add(key, value);
+                foreach (var item in secrets)
+                {
+                    data.Add(item.Key, item.Value.ToString());
+                }
             }
 
             Data = data;
